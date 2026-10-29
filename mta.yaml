@@ -1,0 +1,62 @@
+_schema-version: '3.3'
+ID: supplier-duplicate-check
+version: 1.1.0
+description: Supplier duplicate check SAP CAP service
+
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm ci --ignore-scripts
+        - npx cds build --production
+
+modules:
+  - name: supplier-duplicate-check-db-deployer
+    type: hdb
+    path: gen/db
+    parameters:
+      buildpack: nodejs_buildpack
+      stack: cflinuxfs4
+      memory: 256M
+      disk-quota: 1G
+    requires:
+      - name: supplier-duplicate-check-db
+    build-parameters:
+      builder: custom
+      commands: []
+  - name: supplier-duplicate-check-srv
+    type: nodejs
+    path: gen/srv
+    requires:
+      - name: supplier-duplicate-check-db
+    parameters:
+      app-name: supplier-duplicate-check
+      buildpack: nodejs_buildpack
+      stack: cflinuxfs4
+      instances: 1
+      memory: 512M
+      disk-quota: 1G
+      no-route: false
+      routes:
+        - route: supplier-duplicate-check-org-b-test.cfapps.ap11.hana.ondemand.com
+    properties:
+      NPM_CONFIG_PRODUCTION: 'true'
+      CDS_REQUIRES_AUTH_KIND: dummy
+    build-parameters:
+      builder: custom
+      commands:
+        []
+      ignore:
+        - node_modules/
+        - .env
+        - .env.*
+
+parameters:
+  enable-parallel-deployments: false
+
+resources:
+  - name: supplier-duplicate-check-db
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana
+      service-plan: hdi-shared
