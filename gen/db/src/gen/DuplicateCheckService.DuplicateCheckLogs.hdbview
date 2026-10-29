@@ -1,0 +1,10 @@
+VIEW DuplicateCheckService_DuplicateCheckLogs AS SELECT
+  DuplicateCheckLog_0.ID,
+  DuplicateCheckLog_0.createdAt,
+  DuplicateCheckLog_0.createdBy,
+  DuplicateCheckLog_0.modifiedAt,
+  DuplicateCheckLog_0.modifiedBy,
+  DuplicateCheckLog_0.taskId,
+  DuplicateCheckLog_0.outcome,
+  DuplicateCheckLog_0.matches
+FROM com_acme_slp_DuplicateCheckLog AS DuplicateCheckLog_0

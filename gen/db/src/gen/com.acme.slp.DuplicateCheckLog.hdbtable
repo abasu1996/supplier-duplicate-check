@@ -1,0 +1,11 @@
+COLUMN TABLE com_acme_slp_DuplicateCheckLog (
+  ID NVARCHAR(36) NOT NULL,
+  createdAt TIMESTAMP,
+  createdBy NVARCHAR(255),
+  modifiedAt TIMESTAMP,
+  modifiedBy NVARCHAR(255),
+  taskId NVARCHAR(100),
+  outcome NVARCHAR(20),
+  matches NCLOB,
+  PRIMARY KEY(ID)
+)
